@@ -5,6 +5,7 @@ import json
 import urllib.request
 from thirdpart.termcolor import cprint
 import os
+import re
 
 
 def wget(url):
@@ -71,7 +72,7 @@ class Vulhub_downloader(object):
 
     def search(self, keywords):
         '''
-        支持关键词搜索(可搜索app、name、cve)，可使用g/进行正则搜索，返回搜索到的数据
+        支持关键词搜索(可搜索app、name、cve)，可使用g:进行正则搜索，返回搜索到的数据
         :param keywords:
         :return:
         '''
@@ -84,8 +85,13 @@ class Vulhub_downloader(object):
                 cve = ""
             path = item.get("path")
             keylower = keywords.lower()
-            if keylower in name.lower() or keylower in app.lower() or keylower in cve.lower():
-                result.append(item)
+            if keylower.startswith("g:"):
+                keylower = keylower[2:]
+                if re.search(keylower,name) or re.search(keylower,app) or re.search(keylower,cve):
+                    result.append(item)
+            else:
+                if keylower in name.lower() or keylower in app.lower() or keylower in cve.lower():
+                    result.append(item)
         return result
 
 
@@ -104,7 +110,7 @@ def gui():
         '''
     print(banner)
     print("已加载漏洞环境:{}".format(len(down.originText)))
-    print("请输入关键词搜索(可搜索app、name、cve,不区分大小写)")
+    print("请输入关键词搜索(可搜索app、name、cve,不区分大小写,g:开头使用正则搜索)")
     k = input("> ")
     data = down.search(k)
 
