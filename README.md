@@ -13,7 +13,9 @@ vulhub下载器，可则需下载对应环境(不需要下载整个环境)
 - [ ] 支持命令行参数
 - [ ] 支持python2脚本
 
+## 演示
 
+![preview](preview.gif)
 
 ## Thx
 
